@@ -26,8 +26,8 @@ const Feedback = async ({ params }: RouteParams) => {
     <section className="section-feedback">
       <div className="flex flex-row justify-center">
         <h1 className="text-4xl font-semibold">
-          Feedback on the Interview -{" "}
-          <span className="capitalize">{interview.role}</span> Interview
+          AI Feedback:{" "}
+          <span className="capitalize">{interview.role}</span> Interview Review
         </h1>
       </div>
 
@@ -37,7 +37,7 @@ const Feedback = async ({ params }: RouteParams) => {
           <div className="flex flex-row gap-2 items-center">
             <Image src="/star.svg" width={22} height={22} alt="star" />
             <p>
-              Overall Impression:{" "}
+              Score:{" "}
               <span className="text-primary-200 font-bold">
                 {feedback?.totalScore}
               </span>
@@ -49,6 +49,7 @@ const Feedback = async ({ params }: RouteParams) => {
           <div className="flex flex-row gap-2">
             <Image src="/calendar.svg" width={22} height={22} alt="calendar" />
             <p>
+              Reviewed on:{" "}
               {feedback?.createdAt
                 ? dayjs(feedback.createdAt).format("MMM D, YYYY h:mm A")
                 : "N/A"}
@@ -59,44 +60,48 @@ const Feedback = async ({ params }: RouteParams) => {
 
       <hr />
 
-      <p>{feedback?.finalAssessment}</p>
+      {/* Summary Feedback */}
+      <p className="mt-4 text-lg leading-relaxed">{feedback?.finalAssessment}</p>
 
       {/* Interview Breakdown */}
-      <div className="flex flex-col gap-4">
-        <h2>Breakdown of the Interview:</h2>
+      <div className="flex flex-col gap-4 mt-6">
+        <h2 className="text-2xl font-semibold">Detailed Category Feedback</h2>
         {feedback?.categoryScores?.map((category, index) => (
           <div key={index}>
             <p className="font-bold">
               {index + 1}. {category.name} ({category.score}/100)
             </p>
-            <p>{category.comment}</p>
+            <p className="text-gray-700">{category.comment}</p>
           </div>
         ))}
       </div>
 
-      <div className="flex flex-col gap-3">
-        <h3>Strengths</h3>
-        <ul>
+      {/* Strengths */}
+      <div className="flex flex-col gap-3 mt-6">
+        <h3 className="text-xl font-semibold">What You Did Well</h3>
+        <ul className="list-disc pl-5 text-gray-800">
           {feedback?.strengths?.map((strength, index) => (
             <li key={index}>{strength}</li>
           ))}
         </ul>
       </div>
 
-      <div className="flex flex-col gap-3">
-        <h3>Areas for Improvement</h3>
-        <ul>
+      {/* Areas for Improvement */}
+      <div className="flex flex-col gap-3 mt-6">
+        <h3 className="text-xl font-semibold">Suggestions for Improvement</h3>
+        <ul className="list-disc pl-5 text-gray-800">
           {feedback?.areasForImprovement?.map((area, index) => (
             <li key={index}>{area}</li>
           ))}
         </ul>
       </div>
 
-      <div className="buttons">
+      {/* Navigation Buttons */}
+      <div className="buttons mt-8 flex gap-4">
         <Button className="btn-secondary flex-1">
           <Link href="/" className="flex w-full justify-center">
             <p className="text-sm font-semibold text-primary-200 text-center">
-              Back to dashboard
+              Return to Dashboard
             </p>
           </Link>
         </Button>
@@ -107,7 +112,7 @@ const Feedback = async ({ params }: RouteParams) => {
             className="flex w-full justify-center"
           >
             <p className="text-sm font-semibold text-black text-center">
-              Retake Interview
+              Retake This Interview
             </p>
           </Link>
         </Button>

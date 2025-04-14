@@ -163,7 +163,6 @@ const Agent = ({
           <h3>AI Interviewer</h3>
         </div>
 
-        {/* User Profile Card */}
         <div className="card-border">
           <div className="card-content">
             <Image

@@ -28,8 +28,12 @@ const authFormSchema = (type: FormType) => {
   });
 };
 
+
+import { useState } from "react";
+
 const AuthForm = ({ type }: { type: FormType }) => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false); // <-- loading state
 
   const formSchema = authFormSchema(type);
   const form = useForm<z.infer<typeof formSchema>>({
@@ -42,15 +46,12 @@ const AuthForm = ({ type }: { type: FormType }) => {
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    setLoading(true); // <-- start loading
     try {
       if (type === "sign-up") {
         const { name, email, password } = data;
 
-        const userCredential = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
         const result = await signUp({
           uid: userCredential.user.uid,
@@ -61,6 +62,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
 
         if (!result.success) {
           toast.error(result.message);
+          setLoading(false);
           return;
         }
 
@@ -69,22 +71,16 @@ const AuthForm = ({ type }: { type: FormType }) => {
       } else {
         const { email, password } = data;
 
-        const userCredential = await signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const idToken = await userCredential.user.getIdToken();
+
         if (!idToken) {
           toast.error("Sign in Failed. Please try again.");
+          setLoading(false);
           return;
         }
 
-        await signIn({
-          email,
-          idToken,
-        });
+        await signIn({ email, idToken });
 
         toast.success("Signed in successfully.");
         router.push("/");
@@ -92,6 +88,8 @@ const AuthForm = ({ type }: { type: FormType }) => {
     } catch (error) {
       console.log(error);
       toast.error(`There was an error: ${error}`);
+    } finally {
+      setLoading(false); // <-- stop loading
     }
   };
 
@@ -138,8 +136,14 @@ const AuthForm = ({ type }: { type: FormType }) => {
               type="password"
             />
 
-            <Button className="btn" type="submit">
-              {isSignIn ? "Sign In" : "Create an Account"}
+            <Button className="btn" type="submit" disabled={loading}>
+              {loading
+                ? isSignIn
+                  ? "Signing In..."
+                  : "Creating Account..."
+                : isSignIn
+                ? "Sign In"
+                : "Create an Account"}
             </Button>
           </form>
         </Form>
