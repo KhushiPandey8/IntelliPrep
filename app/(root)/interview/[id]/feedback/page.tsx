@@ -60,10 +60,8 @@ const Feedback = async ({ params }: RouteParams) => {
 
       <hr />
 
-      {/* Summary Feedback */}
       <p className="mt-4 text-lg leading-relaxed">{feedback?.finalAssessment}</p>
 
-      {/* Interview Breakdown */}
       <div className="flex flex-col gap-4 mt-6">
         <h2 className="text-2xl font-semibold">Detailed Category Feedback</h2>
         {feedback?.categoryScores?.map((category, index) => (
