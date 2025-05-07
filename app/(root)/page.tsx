@@ -25,9 +25,9 @@ async function Home() {
     <>
       <section className="card-cta">
         <div className="flex flex-col gap-6 max-w-lg">
-          <h2>Boost Your Confidence with Smart Interview Practice</h2>
+        <h2>Boost Your Confidence with Smart Interview Practice</h2>
           <p className="text-lg">
-            Sharpen your skills with realistic interview scenarios and get AI-driven feedback instantly.
+          Sharpen your skills with realistic interview scenarios and get AI-driven feedback instantly.
           </p>
 
           <Button asChild className="btn-primary max-sm:w-full">
@@ -37,7 +37,7 @@ async function Home() {
 
         <Image
           src="/robot.png"
-          alt="AI interview assistant"
+          alt="robo-dude"
           width={400}
           height={400}
           className="max-sm:hidden"
